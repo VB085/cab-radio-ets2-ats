@@ -17,4 +17,4 @@ How to set up:
 Everything runs locally on 127.0.0.1 - no internet connection needed.
 任何能出声的程序都可以接入：播放器、浏览器皆可。全程本机运行，无需联网。
 
-Project home: https://github.com/yourname/qq-music-radio
+Project home: https://github.com/VB085/cab-radio-ets2-ats

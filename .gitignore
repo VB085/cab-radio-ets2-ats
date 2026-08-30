@@ -6,3 +6,5 @@ obj/
 *.bak
 # 打包产物（由 scripts/package-mod.ps1 重新生成）
 mod/*.scs
+# 发布目录
+dist/
