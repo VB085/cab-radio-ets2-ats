@@ -16,8 +16,20 @@ public sealed class Config
     /// <summary>True = capture follows game presence / clients; false = always capture.</summary>
     public bool AutoMode { get; set; } = true;
 
-    public static string ConfigDir =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "QQMusicRadio");
+    public static string ConfigDir
+    {
+        get
+        {
+            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CabRadio");
+            // Migrate config/log from the pre-rename location.
+            string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "QQMusicRadio");
+            if (!Directory.Exists(dir) && Directory.Exists(oldDir))
+            {
+                try { Directory.Move(oldDir, dir); } catch { /* keep both if locked */ }
+            }
+            return dir;
+        }
+    }
 
     public static string ConfigPath => Path.Combine(ConfigDir, "config.json");
 

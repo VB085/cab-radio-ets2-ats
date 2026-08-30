@@ -6,9 +6,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>QqMusicRadio.Companion</AssemblyName>
+    <AssemblyName>CabRadio</AssemblyName>
     <RootNamespace>QqMusicRadio.Companion</RootNamespace>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <InvariantGlobalization>true</InvariantGlobalization>
     <!-- Release 发布为 win-x64 自包含单文件 -->
     <RuntimeIdentifier Condition="'$(Configuration)' == 'Release'">win-x64</RuntimeIdentifier>

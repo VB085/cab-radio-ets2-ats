@@ -1,5 +1,9 @@
 # 创意工坊 mod 制作与上传
 
+> **1.60 调研补充（2026-08）**：游戏 1.60 新增官方「Game Radio」系统（[SCS modding wiki](https://modding.scssoft.com/wiki/Documentation/Engine/Game_Radio)），支持 mod 内打包本地 ogg/mp3 文件作为离线电台（`offline_radio/` 目录 + `offline_radio.<mod_id>.sii` + 每台一个 `tracks.sii`）。这与我们的**实时流**方案互补而非竞争：Game Radio 放静态文件、我们放"正在播放的任意音频"。
+>
+> **⚠️ M3b 实测结论（2026-08-30）**：**mod 的 `def/live_streams.sii` 不被游戏读取**。对照实验：移走 Documents 的 live_streams.sii 后，游戏电台列表只剩官方模板的 2 条默认台，mod 里的 Cab Radio 条目完全不出现。游戏电台列表**唯一来源是 Documents 文件**。因此创意工坊 mod 的定位调整为：**发现入口 + 安装引导**（描述引导用户装 Companion；mod 里的 def 保留，零成本、未来游戏版本若支持合并即可生效）；**电台条目注入由 Companion 自动完成**（v0.3.0 已内建 SiiWriter：启动时 + 每 60 秒自检，幂等写入两个游戏的 live_streams.sii，游戏重写文件后自动修复）。
+
 ## mod 目录结构
 
 ```
@@ -83,7 +87,7 @@ live_stream_def : _nameless.5151.4d52.0001 {
 - 对策：mod 只有一条 127.0.0.1 URL 定义，无代码、无可执行文件、无版权内容，风险极低
 - **创意工坊永远是"锦上添花"**：Companion 直写 `live_streams.sii` 才是核心通道，即使 mod 被下架或不订阅，功能照常
 
-## Companion 直写 live_streams.sii（兜底通道）
+## Companion 直写 live_streams.sii（主通道，v0.3.0 已内建 SiiWriter）
 
 - 游戏关闭时写入最安全；游戏运行时写入则需重启游戏刷新
 - **⚠️ 实测教训（2026-08）**：游戏「Update From Internet」**不会**删除自定义条目（对照实验确认，与社区 wiki 一致）。真正会丢条目的场景是「文件解析失败时游戏重写文件」（最早由我们插入位置 bug 触发，已修复）——写入逻辑保证文件始终有效即可

@@ -12,7 +12,7 @@ internal static class Program
     [STAThread]
     private static int Main(string[] args)
     {
-        using var mutex = new Mutex(true, "QqMusicRadio.Companion.SingleInstance", out bool createdNew);
+        using var mutex = new Mutex(true, "CabRadio.SingleInstance", out bool createdNew);
         if (!createdNew)
         {
             MessageBox.Show("Cab Radio 已在运行。\nCab Radio is already running.", "Cab Radio · 驾驶室电台");
@@ -21,6 +21,11 @@ internal static class Program
 
         var config = Config.Load(args);
         Log.Info($"start v{typeof(Program).Assembly.GetName().Version}  device='{config.DeviceName}' port={config.Port} bitrate={config.Bitrate} automode={config.AutoMode}");
+
+        // The game reads its radio list solely from Documents\live_streams.sii
+        // (mod defs are ignored — verified 2026-08), so the Companion owns injection.
+        string streamUrl = $"http://127.0.0.1:{config.Port}/stream.mp3";
+        SiiWriter.EnsureEntry(streamUrl, "Cab Radio", config.Bitrate);
 
         // Capture -> LAME -> ring buffer -> HTTP
         using var ring = new RingBuffer(4 * 1024 * 1024);
@@ -57,10 +62,14 @@ internal static class Program
         var pumpTask = Task.Run(() => PumpLoop(cts.Token, ring, enc, capture, state, server, sink, config), cts.Token);
 
         // Controller: in auto mode, capture runs when the game is up or clients are listening.
+        // Also periodically re-heals the radio entry (the game may rewrite its file).
         var ctrlTask = Task.Run(async () =>
         {
+            int cycle = 0;
             while (!cts.IsCancellationRequested)
             {
+                if (++cycle % 30 == 0)
+                    SiiWriter.EnsureEntry(streamUrl, "Cab Radio", config.Bitrate);
                 bool shouldRun = !state.AutoMode || state.GameRunning || server.ClientCount > 0;
                 if (shouldRun) capture.EnsureRunning();
                 else capture.StopCapture();

@@ -1,18 +1,20 @@
 Cab Radio - stream YOUR local audio into your truck radio.
 把本机音频开进你的驾驶室 - 电脑上放什么，游戏电台里就播什么.
 
-This mod only adds ONE radio entry pointing to a local stream on your own PC:
-http://127.0.0.1:17890/stream.mp3
+The actual audio engine is the Cab Radio Companion (a small tray app for
+Windows). This mod is the discovery point: once the Companion is installed,
+it automatically keeps the "Cab Radio" station listed in your game radio
+and serves the stream at http://127.0.0.1:17890/stream.mp3.
 
-The sound comes from the Cab Radio Companion on your computer. Any audio app
-works - route its output through VB-CABLE and the Companion does the rest.
-
-Setup:
+How to set up:
 1. Install VB-CABLE (vb-audio.com)
-2. Route your player's output to "CABLE Input" (e.g. QQ Music:
-   Settings -> Audio -> output device; for apps without that option use
-   Windows Settings -> Sound -> Volume mixer to force-route the app)
-3. Run the Companion
-Done - select "Cab Radio" in the game radio.
+2. Route your player's output to "CABLE Input" (players with a device
+   option: pick it in settings; apps without one: Windows Settings ->
+   Sound -> Volume mixer -> force-route the app)
+3. Run the Companion (tray icon; optional "Run at startup")
+4. Start the game and select "Cab Radio" in the radio
+
+Everything runs locally on 127.0.0.1 - no internet connection needed.
+任何能出声的程序都可以接入：播放器、浏览器皆可。全程本机运行，无需联网。
 
 Project home: https://github.com/yourname/qq-music-radio

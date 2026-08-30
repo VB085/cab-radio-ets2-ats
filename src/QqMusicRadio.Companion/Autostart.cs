@@ -6,7 +6,7 @@ namespace QqMusicRadio.Companion;
 public static class Autostart
 {
     private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-    private const string ValueName = "QQMusicRadioCompanion";
+    private const string ValueName = "CabRadioCompanion";
 
     public static bool IsEnabled()
     {
